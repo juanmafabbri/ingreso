@@ -7,7 +7,7 @@ import java.util.List;
 
 public class InfoSistema
 {
-	public static final String RUTA_CLOUD = "https://juan-galaxias.appspot.com" + Ruta.RAIZ;
+	public static final String RUTA_CLOUD = "http://35.198.15.17:8080" + Ruta.RAIZ;
 
 	private String autor = "Juan Manuel Fabbri";
 	private String email = "juanmanuelfabbri@gmail.com";

@@ -1,0 +1,10 @@
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.iml
+*.xml
+*.name
+.idea/

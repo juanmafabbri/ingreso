@@ -9,6 +9,7 @@ import com.galaxia.entity.Clima;
 import com.galaxia.exception.GalaxiaException;
 import com.galaxia.repository.GalaxiaRepository;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -21,6 +22,7 @@ import static com.galaxia.util.MathUtil.*;
 @PropertySource({"classpath:application.properties"})
 public class GalaxiaServiceImpl implements GalaxiaService
 {
+	private static final Logger logger = Logger.getLogger(GalaxiaServiceImpl.class);
 
 	@Autowired
 	private Environment env;
@@ -38,7 +40,9 @@ public class GalaxiaServiceImpl implements GalaxiaService
 	{
 		if(galaxiaCreada())
 		{
-			throw new GalaxiaException("La galaxia ya se encuentra iniciada.");
+			String mensaje = "La galaxia ya se encuentra iniciada.";
+			logger.error(mensaje);
+			throw new GalaxiaException(mensaje);
 		}
 		
 		Clima clima = null;
@@ -47,8 +51,7 @@ public class GalaxiaServiceImpl implements GalaxiaService
 		for (int i = 0; i < dias; i ++)
 		{
 			posicionarPlanetas(i);
-			clima = new Clima();
-			clima.setDia(i);
+			clima = registrarDia(i);
 			if(estanAlineados())
 			{
 				registrarClimaPlanetasNoAlineados(clima);
@@ -59,22 +62,21 @@ public class GalaxiaServiceImpl implements GalaxiaService
 			}
 			galaxiaRepository.save(clima);
 		}
-		
-		Respuesta resp = new Respuesta();
-		resp.setEstado(Respuesta.OK);
-		resp.setMensaje("Galaxia creada exitosamente");
-		return resp;
+		logger.info("Galaxia iniciada correctamente.");
+		return crearRespuesta();
 	}
 
 	public Respuesta reiniciar() throws GalaxiaException
 	{
 		validarExistenciaDeGalaxia();
 		galaxiaRepository.deleteAll();
+		logger.info("Se eliman los datos persistidos de la galaxia para el reinicio.");
 		return this.iniciar();
 	}
 
 	public ClimaRespuesta obtenerClimaPorDia(String dia) throws GalaxiaException
 	{
+		logger.info(String.format("Obteniendo clima para el día %s", dia));
 		validarExistenciaDeGalaxia();
 
 		int iDia;
@@ -97,15 +99,9 @@ public class GalaxiaServiceImpl implements GalaxiaService
 		return new ClimaRespuesta(clima.getDia(), clima.getClima());
 	}
 
-	private void validarExistenciaDeGalaxia() throws GalaxiaException {
-		if(!galaxiaCreada())
-		{
-			throw new GalaxiaException("La galaxia no se encuentra iniciada.");
-		}
-	}
-
 	public int obtenerPeriodosPorClima(String tipo) throws GalaxiaException
 	{
+		logger.info(String.format("Obteniendo periodos por tipo de clima %s", tipo));
 		validarExistenciaDeGalaxia();
 
 		ClimaEnum tipoEnum;
@@ -124,16 +120,21 @@ public class GalaxiaServiceImpl implements GalaxiaService
 
 	public int obtenerMaximoDeLluvia() throws GalaxiaException
 	{
+		logger.info("Obteniendo máximo de lluvia.");
 		validarExistenciaDeGalaxia();
 
-		return galaxiaRepository.findAllByOrderByPerimetroDesc().get(0).getDia();
+		return galaxiaRepository.findAllByOrderByPerimetroDesc().stream().findFirst().get().getDia();
 	}
 
 	public boolean galaxiaCreada() throws GalaxiaException
 	{
-		if(galaxiaRepository.count() > 0)
-			return true;
-		return false;
+		return galaxiaRepository.count() > 0;
+	}
+
+	private Clima registrarDia(int dia) {
+		Clima clima = new Clima();
+		clima.setDia(dia);
+		return clima;
 	}
 
 	private boolean estanAlineados()
@@ -152,6 +153,13 @@ public class GalaxiaServiceImpl implements GalaxiaService
 	private boolean solEstaDentroDelTriangulo()
 	{
 		return puntoDentroDeTriangulo(new Coordenada().alOrigen(), ferengi.getCoordenadas(), betasoide.getCoordenadas(), vulcano.getCoordenadas());
+	}
+
+	private void validarExistenciaDeGalaxia() throws GalaxiaException {
+		if(!galaxiaCreada())
+		{
+			throw new GalaxiaException("La galaxia no se encuentra iniciada.");
+		}
 	}
 
 	private double obtenerPerimetro()
@@ -201,15 +209,24 @@ public class GalaxiaServiceImpl implements GalaxiaService
 		}
 	}
 
+	private Respuesta crearRespuesta() {
+		Respuesta resp = new Respuesta();
+		resp.setEstado(Respuesta.OK);
+		resp.setMensaje("Galaxia creada exitosamente");
+		return resp;
+	}
+
 	private void registrarClimaPlanetasAlineados(Clima clima) {
 		clima.setPerimetro(obtenerPerimetro());
+		ClimaEnum tipoDeClima = null;
 		if(solEstaDentroDelTriangulo())
 		{
-			clima.setClima(ClimaEnum.Lluvia);
+			tipoDeClima = ClimaEnum.Lluvia;
 		}
 		else
 		{
-			clima.setClima(ClimaEnum.Normal);
+			tipoDeClima = ClimaEnum.Normal;
 		}
+		clima.setClima(tipoDeClima);
 	}
 }
