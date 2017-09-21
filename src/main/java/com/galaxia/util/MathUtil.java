@@ -7,13 +7,13 @@ public class MathUtil
 {
     public static boolean puntosAlineados(Coordenada coord1, Coordenada coord2, Coordenada coord3)
     {
-        double hipotenusa = MathUtil.distanciaEntreDosPuntos(coord1, coord2);
-        double opuesto = MathUtil.distanciaEntreDosPuntos(coord1, new Coordenada(coord2.getCoordX(), 0));
+        double hipotenusa = distanciaEntreDosPuntos(coord1, coord2);
+        double opuesto = distanciaEntreDosPuntos(coord1, new Coordenada(coord2.getCoordX(), 0));
 
         double sin1 = opuesto / hipotenusa;
 
-        hipotenusa = MathUtil.distanciaEntreDosPuntos(coord1, coord3);
-        opuesto = MathUtil.distanciaEntreDosPuntos(coord1, new Coordenada(coord3.getCoordX(), 0));
+        hipotenusa = distanciaEntreDosPuntos(coord1, coord3);
+        opuesto = distanciaEntreDosPuntos(coord1, new Coordenada(coord3.getCoordX(), 0));
 
         double sin2 = opuesto / hipotenusa;
 

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.galaxia.service.GalaxiaServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 49.459 sec - in com.galaxia.service.GalaxiaServiceImplTest

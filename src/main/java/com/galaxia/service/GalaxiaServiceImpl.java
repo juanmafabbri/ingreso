@@ -54,11 +54,11 @@ public class GalaxiaServiceImpl implements GalaxiaService
 			clima = registrarDia(i);
 			if(estanAlineados())
 			{
-				registrarClimaPlanetasNoAlineados(clima);
+				registrarClimaPlanetasAlineados(clima);
 			}
 			else
 			{
-				registrarClimaPlanetasAlineados(clima);
+				registrarClimaPlanetasNoAlineados(clima);
 			}
 			galaxiaRepository.save(clima);
 		}
@@ -197,7 +197,7 @@ public class GalaxiaServiceImpl implements GalaxiaService
 		vulcano.setDistancia(new Integer(env.getProperty("galaxia.planeta.vulcano.distancia")));
 	}
 
-	private void registrarClimaPlanetasNoAlineados(Clima clima) {
+	private void registrarClimaPlanetasAlineados(Clima clima) {
 		clima.setPerimetro(0);
 		if(estanAlineadosConSol())
 		{
@@ -216,7 +216,7 @@ public class GalaxiaServiceImpl implements GalaxiaService
 		return resp;
 	}
 
-	private void registrarClimaPlanetasAlineados(Clima clima) {
+	private void registrarClimaPlanetasNoAlineados(Clima clima) {
 		clima.setPerimetro(obtenerPerimetro());
 		ClimaEnum tipoDeClima = null;
 		if(solEstaDentroDelTriangulo())

@@ -1,0 +1,17 @@
+com\galaxia\constant\Ruta.class
+com\galaxia\GalaxiaApplication.class
+com\galaxia\repository\GalaxiaRepository.class
+com\galaxia\util\MathUtil.class
+com\galaxia\constant\ClimaEnum.class
+com\galaxia\data\Coordenada.class
+com\galaxia\service\GalaxiaService.class
+com\galaxia\service\GalaxiaServiceImpl.class
+com\galaxia\data\Planeta.class
+com\galaxia\dto\InfoSistema.class
+com\galaxia\dto\ClimaRespuesta.class
+com\galaxia\controller\GalaxiaController.class
+com\galaxia\dto\Error.class
+com\galaxia\dto\Respuesta.class
+com\galaxia\entity\Clima.class
+com\galaxia\exception\GalaxiaException.class
+com\galaxia\dto\Consideracion.class
