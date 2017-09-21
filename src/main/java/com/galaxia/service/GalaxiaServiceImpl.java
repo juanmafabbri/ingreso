@@ -217,16 +217,18 @@ public class GalaxiaServiceImpl implements GalaxiaService
 	}
 
 	private void registrarClimaPlanetasNoAlineados(Clima clima) {
-		clima.setPerimetro(obtenerPerimetro());
 		ClimaEnum tipoDeClima = null;
+		double perimetro = 0d;
 		if(solEstaDentroDelTriangulo())
 		{
+			perimetro = obtenerPerimetro();
 			tipoDeClima = ClimaEnum.Lluvia;
 		}
 		else
 		{
 			tipoDeClima = ClimaEnum.Normal;
 		}
+		clima.setPerimetro(perimetro);
 		clima.setClima(tipoDeClima);
 	}
 }

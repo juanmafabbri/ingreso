@@ -85,7 +85,7 @@ public class GalaxiaServiceImplTest {
         //when
         int optimo = galaxiaService.obtenerMaximoDeLluvia();
         //then
-        assertThat(optimo).isEqualTo(2088);
+        assertThat(optimo).isEqualTo(1368);
     }
 
     @Test
